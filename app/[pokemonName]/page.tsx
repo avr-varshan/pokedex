@@ -8,7 +8,6 @@ export default async function PokemonPage({ params }: { params: { pokemonName: s
 
     const pokemonObject = await getPokemon(pokemonName);
 
-    console.log(pokemonObject);
 
     const nameStyle = {
         textShadow: '2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000'

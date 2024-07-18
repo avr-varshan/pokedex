@@ -3,12 +3,28 @@ import Link from "next/link";
 import Image from "next/image";
 import { getPokemon } from "@/lib/pokemonApi";
 
+interface PokemonType {
+  slot: number;
+  type: {
+    name: string;
+  };
+}
+
+interface PokemonSprites {
+  front_default: string;
+}
+
+interface PokemonObject {
+  sprites: PokemonSprites;
+  types: PokemonType[];
+}
+
 interface PokemonCardProps {
-  name: string,
+  name: string;
 }
 
 const PokemonPreview = ({ name }: PokemonCardProps) => {
-  const [pokemonObject, setPokemonObject] = useState(null);
+  const [pokemonObject, setPokemonObject] = useState<PokemonObject | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -29,28 +45,33 @@ const PokemonPreview = ({ name }: PokemonCardProps) => {
     );
   }
 
+  if (!pokemonObject) {
+    return null;
+  }
+
   const typeColors = {
-    'bug': 'bg-bug hover:bg-bug-light',
-    'dark': 'bg-dark hover:bg-dark-light',
-    'dragon': 'bg-dragon hover:bg-dragon-light',
-    'electric': 'bg-electric hover:bg-electric-light',
-    'fairy': 'bg-fairy hover:bg-fairy-light',
-    'fighting': 'bg-fighting hover:bg-fighting-light',
-    'fire': 'bg-fire hover:bg-fire-light',
-    'flying': 'bg-flying hover:bg-flying-light',
-    'ghost': 'bg-ghost hover:bg-ghost-light',
-    'normal': 'bg-normal hover:bg-normal-light',
-    'grass': 'bg-grass hover:bg-grass-light',
-    'ground': 'bg-ground hover:bg-ground-light',
-    'ice': 'bg-ice hover:bg-ice-light',
-    'poison': 'bg-poison hover:bg-poison-light',
-    'psychic': 'bg-psychic hover:bg-psychic-light',
-    'rock': 'bg-rock hover:bg-rock-light',
-    'steel': 'bg-steel hover:bg-steel-light',
-    'water': 'bg-water hover:bg-water-light'
+    bug: 'bg-bug hover:bg-bug-light',
+    dark: 'bg-dark hover:bg-dark-light',
+    dragon: 'bg-dragon hover:bg-dragon-light',
+    electric: 'bg-electric hover:bg-electric-light',
+    fairy: 'bg-fairy hover:bg-fairy-light',
+    fighting: 'bg-fighting hover:bg-fighting-light',
+    fire: 'bg-fire hover:bg-fire-light',
+    flying: 'bg-flying hover:bg-flying-light',
+    ghost: 'bg-ghost hover:bg-ghost-light',
+    normal: 'bg-normal hover:bg-normal-light',
+    grass: 'bg-grass hover:bg-grass-light',
+    ground: 'bg-ground hover:bg-ground-light',
+    ice: 'bg-ice hover:bg-ice-light',
+    poison: 'bg-poison hover:bg-poison-light',
+    psychic: 'bg-psychic hover:bg-psychic-light',
+    rock: 'bg-rock hover:bg-rock-light',
+    steel: 'bg-steel hover:bg-steel-light',
+    water: 'bg-water hover:bg-water-light'
   };
 
-  const firstType = pokemonObject.types[0].type.name;
+  type PokemonTypeName = keyof typeof typeColors;
+  const firstType = pokemonObject.types[0].type.name as PokemonTypeName;
 
   return (
     <Link
@@ -74,7 +95,7 @@ const PokemonPreview = ({ name }: PokemonCardProps) => {
           {pokemonObject.types.map((typeEntry) => (
             <span 
               key={typeEntry.slot} 
-              className={`inline-block rounded-full px-3 py-1 text-sm font-semibold text-white mr-2 ${typeColors[typeEntry.type.name]}`}
+              className={`inline-block rounded-full px-3 py-1 text-sm font-semibold text-white mr-2 ${typeColors[typeEntry.type.name as PokemonTypeName]}`}
             >
               {typeEntry.type.name}
             </span>
